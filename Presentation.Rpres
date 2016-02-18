@@ -1,0 +1,137 @@
+Analyzing NYC HS Graduation Rates
+========================================================
+
+author      : Brad Allen
+
+Understanding NYC Student Performance
+========================================================
+
+I taught in Brooklyn between 2007-2009. My students would be included in this data. I thought it would be interesting to look at some of the graduation rates to see differences across the city. I sought to answer 3 questions:
+
+- How does performance change between boroughs?
+- How does performance change over time? 
+- How does performance change between different demographics?
+
+You can find an interactive companion at my shinyapps page (bradaallen).
+
+
+Graduation Rates By Borough
+========================================================
+
+Challenging, but Improving Times
+- There is a strong relationship between socioeconomic status and graduation rate.
+- There is also a strong trend of increasing performance throughout NYC at this time. It coincides with the appointment of Joel Klein as Chancellor.
+
+***
+
+Chart of Graduation Rates by Borough
+
+```{r, echo=F, results='asis'}
+
+require(ggplot2)
+library(dplyr)
+library(data.table)
+setwd("~/Desktop/project/")
+data <- fread("borough_grad_rates.csv")
+colnames(data) <- make.names(colnames(data))
+data <- data %>% filter(Cohort >= 2001, Cohort <= 2005, All == "Total") 
+
+CohortByYear <- ggplot(data = data, aes(x = Cohort, y = Total.Grads.....of.cohort, fill = factor(Borough)))
+CohortByYear <- CohortByYear + geom_bar(position="dodge", stat="identity")
+CohortByYear <- CohortByYear + ylab("Graduation Rate") + scale_fill_discrete("Borough")
+CohortByYear
+```
+
+
+
+Special Education and 2nd Language Students
+========================================================
+
+20-40% of Second Language Students Graduate
+
+```{r, echo=F, results='asis'}
+
+require(ggplot2)
+library(dplyr)
+library(data.table)
+setwd("~/Desktop/project/")
+data <- fread("borough_grad_rates.csv")
+colnames(data) <- make.names(colnames(data))
+data <- data %>% filter(Cohort >= 2001, Cohort <= 2005, Demographic == "English Language Learners") 
+
+ELLByYear <- ggplot(data = data, aes(x = Cohort, y = Total.Grads.....of.cohort, fill = factor(Borough)))
+ELLByYear <- ELLByYear + geom_bar(position="dodge", stat="identity")
+ELLByYear <- ELLByYear + ylab("Graduation Rate") + scale_fill_discrete("Borough") + ggtitle("Graduation Rate for 2nd Language Students")
+ELLByYear
+```
+
+***
+
+Approximately ~20% of SpEd Students Graduate
+
+```{r, echo=F, results='asis'}
+
+require(ggplot2)
+library(dplyr)
+library(data.table)
+setwd("~/Desktop/project/")
+data <- fread("borough_grad_rates.csv")
+colnames(data) <- make.names(colnames(data))
+data <- data %>% filter(Cohort >= 2001, Cohort <= 2005, Demographic == "Special Education") 
+
+EDByYear <- ggplot(data = data, aes(x = Cohort, y = Total.Grads.....of.cohort, fill = factor(Borough)))
+EDByYear <- EDByYear + geom_bar(position="dodge", stat="identity")
+EDByYear <- EDByYear + ylab("Graduation Rate") + scale_fill_discrete("Borough") + ggtitle("Graduation Rate for Special Education Students")
+EDByYear
+```
+
+Graduation Rates by Race and Gender
+========================================================
+
+Gaps in graduating rates by race can be almost 20%
+
+```{r, echo=F, results='asis'}
+
+require(ggplot2)
+library(dplyr)
+library(data.table)
+setwd("~/Desktop/project/")
+data <- fread("borough_grad_rates.csv")
+colnames(data) <- make.names(colnames(data))
+data <- data %>% filter(Cohort >= 2001, Cohort <= 2005, All == "Race", Borough ==  "Brooklyn") 
+
+RaceByYear <- ggplot(data = data, aes(x = Cohort, y = Total.Grads.....of.cohort, fill = factor(Demographic)))
+RaceByYear <- RaceByYear + geom_bar(position="dodge", stat="identity")
+RaceByYear <- RaceByYear + ylab("Graduation Rate") + scale_fill_discrete("Race") + ggtitle("Graduation Rate by Race, Brooklyn")
+RaceByYear
+```
+
+***
+
+There is almost a 15% gap between girls and boys
+
+```{r, echo=F, results='asis'}
+
+require(ggplot2)
+library(dplyr)
+library(data.table)
+setwd("~/Desktop/project/")
+data <- fread("borough_grad_rates.csv")
+colnames(data) <- make.names(colnames(data))
+data <- data %>% filter(Cohort >= 2001, Cohort <= 2005, All == "Gender", Borough == "Brooklyn") 
+
+GenderByYear <- ggplot(data = data, aes(x = Cohort, y = Total.Grads.....of.cohort, fill = factor(Demographic)))
+GenderByYear <- GenderByYear + geom_bar(position="dodge", stat="identity")
+GenderByYear <- GenderByYear + ylab("Graduation Rate") + scale_fill_discrete("Gender") + ggtitle("Graduation Rate by Gender, Brooklyn")
+GenderByYear
+```
+
+Today's Rates
+========================================================
+
+Steady progress has continued to be achieved in New York:
+- In 2015, the rate moved above 70% for the first time ever (NYT)
+- Still, only 50% of students with disabilities graduated on time (an improvement)
+- The gap between race persists (88% of white students vs. 65% of black and Hispanic)
+
+
